@@ -3,6 +3,9 @@ class PostsController < ApplicationController
 
   before_action :authorize_user, except: [:show, :new, :create]
 
+  before_action :check_moderator, except: [:show, :new, :create]
+  #before_action :authorize_moderator, except: [:show, :new, :create]
+
   def show
     @post = Post.find(params[:id])
   end
