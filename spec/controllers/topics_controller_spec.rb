@@ -4,33 +4,45 @@ include SessionsHelper
 
 RSpec.describe TopicsController, type: :controller do
   let(:my_topic) { create(:topic) }
+  let(:my_private_topic) { create(:topic, public: false) }
 
   context "guest" do
     describe "GET index" do
       it "returns http success" do
         get :index
+
         expect(response).to have_http_status(:success)
       end
 
       it "assigns Topic.all to topic" do
         get :index
+
         expect(assigns(:topics)).to eq([my_topic])
       end
     end
 
     describe "GET show" do
+      it "redirects from private topics" do
+        get :show, {id: my_private_topic.id}
+        
+        expect(response).to redirect_to(new_session_path)
+      end
+
       it "returns http success" do
         get :show, {id: my_topic.id}
+
         expect(response).to have_http_status(:success)
       end
 
       it "renders the #show view" do
         get :show, {id: my_topic.id}
+
         expect(response).to render_template :show
       end
 
       it "assigns my_topic to @topic" do
         get :show, {id: my_topic.id}
+
         expect(assigns(:topic)).to eq(my_topic)
       end
     end
@@ -38,6 +50,7 @@ RSpec.describe TopicsController, type: :controller do
      describe "GET new" do
       it "returns http redirect" do
         get :new
+
         expect(response).to redirect_to(new_session_path)
       end
     end
@@ -45,6 +58,7 @@ RSpec.describe TopicsController, type: :controller do
     describe "POST create" do
       it "returns http redirect" do
         post :create, topic: {name: RandomData.random_sentence, description: RandomData.random_paragraph}
+
         expect(response).to redirect_to(new_session_path)
       end
     end
@@ -52,6 +66,7 @@ RSpec.describe TopicsController, type: :controller do
     describe "GET edit" do
       it "returns http redirect" do
         get :edit, {id: my_topic.id}
+
         expect(response).to redirect_to(new_session_path)
       end
     end
@@ -72,6 +87,11 @@ RSpec.describe TopicsController, type: :controller do
         expect(response).to redirect_to(new_session_path)
       end
     end
+
+    it "does not include private topics in @topics" do
+      get :index
+      expect(assigns(:topics)).not_to include(my_private_topic)
+    end
   end
 
   context "member user" do
@@ -83,28 +103,33 @@ RSpec.describe TopicsController, type: :controller do
     describe "GET index" do
       it "returns http success" do
         get :index
+
         expect(response).to have_http_status(:success)
       end
 
       it "assigns Topic.all to topic" do
         get :index
-        expect(assigns(:topics)).to eq([my_topic])
+
+        expect(assigns(:topics)).to eq([my_topic, my_private_topic])
       end
     end
 
     describe "GET show" do
       it "returns http success" do
         get :show, {id: my_topic.id}
+
         expect(response).to have_http_status(:success)
       end
 
       it "renders the #show view" do
         get :show, {id: my_topic.id}
+
         expect(response).to render_template :show
       end
 
       it "assigns my_topic to @topic" do
         get :show, {id: my_topic.id}
+
         expect(assigns(:topic)).to eq(my_topic)
       end
     end
@@ -112,6 +137,7 @@ RSpec.describe TopicsController, type: :controller do
     describe "GET new" do
       it "returns http redirect" do
         get :new
+
         expect(response).to redirect_to(topics_path)
       end
     end
@@ -119,6 +145,7 @@ RSpec.describe TopicsController, type: :controller do
     describe "POST create" do
       it "returns http redirect" do
         post :create, topic: {name: RandomData.random_sentence, description: RandomData.random_paragraph}
+
         expect(response).to redirect_to(topics_path)
       end
     end
@@ -126,6 +153,7 @@ RSpec.describe TopicsController, type: :controller do
     describe "GET edit" do
       it "returns http redirect" do
         get :edit, {id: my_topic.id}
+
         expect(response).to redirect_to(topics_path)
       end
     end
@@ -136,6 +164,7 @@ RSpec.describe TopicsController, type: :controller do
         new_description = RandomData.random_paragraph
 
         put :update, id: my_topic.id, topic: {name: new_name, description: new_description}
+
         expect(response).to redirect_to(topics_path)
       end
     end
@@ -143,6 +172,7 @@ RSpec.describe TopicsController, type: :controller do
     describe "DELETE destroy" do
       it "returns http redirect" do
         delete :destroy, {id: my_topic.id}
+
         expect(response).to redirect_to(topics_path)
       end
     end
@@ -157,28 +187,33 @@ RSpec.describe TopicsController, type: :controller do
     describe "GET index" do
       it "returns http success" do
         get :index
+
         expect(response).to have_http_status(:success)
       end
 
       it "assigns Topic.all to topic" do
         get :index
-        expect(assigns(:topics)).to eq([my_topic])
+
+        expect(assigns(:topics)).to eq([my_topic, my_private_topic])
       end
     end
 
     describe "GET show" do
       it "returns http success" do
         get :show, {id: my_topic.id}
+
         expect(response).to have_http_status(:success)
       end
 
       it "renders the #show view" do
         get :show, {id: my_topic.id}
+
         expect(response).to render_template :show
       end
 
       it "assigns my_topic to @topic" do
         get :show, {id: my_topic.id}
+
         expect(assigns(:topic)).to eq(my_topic)
       end
     end
@@ -186,16 +221,19 @@ RSpec.describe TopicsController, type: :controller do
     describe "GET new" do
       it "returns http success" do
         get :new
+
         expect(response).to have_http_status(:success)
       end
 
       it "renders the #new view" do
         get :new
+
         expect(response).to render_template :new
       end
 
       it "initializes @topic" do
         get :new
+
         expect(assigns(:topic)).not_to be_nil
       end
     end
@@ -207,11 +245,13 @@ RSpec.describe TopicsController, type: :controller do
 
       it "assigns Topic.last to @topic" do
         post :create, topic: {name: RandomData.random_sentence, description: RandomData.random_paragraph}
+
         expect(assigns(:topic)).to eq Topic.last
       end
 
       it "redirects to the new topic" do
         post :create, topic: {name: RandomData.random_sentence, description: RandomData.random_paragraph}
+
         expect(response).to redirect_to Topic.last
       end
     end
@@ -219,11 +259,13 @@ RSpec.describe TopicsController, type: :controller do
     describe "GET edit" do
       it "returns http success" do
         get :edit, {id: my_topic.id}
+
         expect(response).to have_http_status(:success)
       end
 
       it "renders the #edit view" do
         get :edit, {id: my_topic.id}
+
         expect(response).to render_template :edit
       end
 
@@ -245,6 +287,7 @@ RSpec.describe TopicsController, type: :controller do
         put :update, id: my_topic.id, topic: {name: new_name, description: new_description}
 
         updated_topic = assigns(:topic)
+
         expect(updated_topic.id).to eq my_topic.id
         expect(updated_topic.name).to eq new_name
         expect(updated_topic.description).to eq new_description
@@ -255,6 +298,7 @@ RSpec.describe TopicsController, type: :controller do
         new_description = RandomData.random_paragraph
 
         put :update, id: my_topic.id, topic: {name: new_name, description: new_description}
+
         expect(response).to redirect_to my_topic
       end
     end
@@ -263,11 +307,13 @@ RSpec.describe TopicsController, type: :controller do
       it "deletes the topic" do
         delete :destroy, {id: my_topic.id}
         count = Post.where({id: my_topic.id}).size
+
         expect(count).to eq 0
       end
 
       it "redirects to topics index" do
         delete :destroy, {id: my_topic.id}
+
         expect(response).to redirect_to topics_path
       end
     end
