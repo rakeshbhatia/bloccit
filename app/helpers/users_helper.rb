@@ -1,5 +1,9 @@
 module UsersHelper
-  def any_posts_or_comments?
-    current_user && (current_user.posts.size != 0 || current_user.comments.size != 0)
+  def any_posts?(user)
+    user.posts.size.not_nil?
+  end
+
+  def any_comments?(user)
+    user.comments.size.not_nil?
   end
 end

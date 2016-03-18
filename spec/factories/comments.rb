@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :topic do
-    body 'Comment Body'
+    body 'Topic Body'
     post my_post
     user my_user
   end
