@@ -1,6 +1,6 @@
 require 'rails_helper'
 
- RSpec.describe Api::V1::PostsController, type: :controller do
+ RSpec.describe Api::V1::CommentsController, type: :controller do
    let(:my_user) { create(:user) }
    let(:my_topic) { create(:topic) }
    let(:my_post) { create(:post) }
@@ -14,16 +14,17 @@ require 'rails_helper'
      end
 
      it "GET show returns http success" do
-       get :show, id: my_post.id
+       get :show, id: my_comment.id
 
        expect(response).to have_http_status(:success)
      end
 
      it "GET show returns array of child comments" do
-       get :show, id: my_post.id
+       get :show, id: my_comment.id
        response_hash = JSON.parse response.body
 
-       expect(response_hash['comments']).to_not be_nil
+       expect(response_hash['id']).to eq my_comment.id
+       expect(response_hash['body']).to eq my_comment.body
      end
    end
 
@@ -38,15 +39,16 @@ require 'rails_helper'
      end
 
      it "GET show returns http success" do
-       get :show, id: my_post.id
+       get :show, id: my_comment.id
        expect(response).to have_http_status(:success)
      end
 
      it "GET show returns array of child comments" do
-       get :show, id: my_post.id
+       get :show, id: my_comment.id
        response_hash = JSON.parse response.body
 
-       expect(response_hash['comments']).to_not be_nil
+       expect(response_hash['id']).to eq my_comment.id
+       expect(response_hash['body']).to eq my_comment.body
      end
    end
  end
