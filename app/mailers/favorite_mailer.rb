@@ -16,12 +16,12 @@ class FavoriteMailer < ApplicationMailer
 
   def new_post(post)
 
-    headers["Message-ID"] = "<comments/#{post.id}@your-app-name.example>"
+    headers["Message-ID"] = "<posts/#{post.id}@your-app-name.example>"
     headers["In-Reply-To"] = "<post/#{post.id}@your-app-name.example>"
     headers["References"] = "<post/#{post.id}@your-app-name.example>"
 
-    @post = post_id
+    @post = post
 
-    mail(to: post.user.email, subject: "New post on #{post.title}")
+    mail(to: post.user.email, subject: "You are following #{post.title}")
   end
 end

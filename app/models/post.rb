@@ -4,9 +4,9 @@ class Post < ActiveRecord::Base
   has_many :comments, dependent: :destroy
   has_many :votes, dependent: :destroy
   has_many :favorites, dependent: :destroy
-
   has_many :labelings, as: :labelable
   has_many :labels, through: :labelings
+  after_create :create_favorite
 
   default_scope { order('rank DESC') }
 
@@ -14,8 +14,6 @@ class Post < ActiveRecord::Base
   validates :body, length: { minimum: 20 }, presence: true
   validates :topic, presence: true
   validates :user, presence: true
-
-  after_create :create_favorite
 
   def up_votes
     votes.where(value: 1).count

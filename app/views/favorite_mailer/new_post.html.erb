@@ -1,1 +1,13 @@
 <!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+</head>
+<body>
+<h1>You are following "<%= @post.title %>" and will receive all comment notifications. If you do not want comment notifications,
+  unfavorite <%= link_to "post", topic_post_url(@post.topic, @post) %>.</h1>
+<p>
+  <%= link_to "View post url", topic_post_url(@post.topic, @post) %>
+</p>
+</body>
+</html>

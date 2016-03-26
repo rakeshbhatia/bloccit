@@ -1,1 +1,2 @@
-You are following "<%= @post.title %>"
+You are following "<%= @post.title %>" and will receive all comment notifications. If you do not want comment notifications,
+unfavorite <%= link_to "post", topic_post_url(@post.topic, @post) %>
