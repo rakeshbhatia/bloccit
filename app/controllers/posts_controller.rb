@@ -3,6 +3,8 @@ class PostsController < ApplicationController
 
   before_action :authorize_user, except: [:show, :new, :create]
 
+  before_action :authorize_moderator, only: [:destroy]
+
   def show
     @post = Post.find(params[:id])
   end
@@ -66,6 +68,15 @@ class PostsController < ApplicationController
 
     unless current_user == post.user || current_user.admin?
       flash[:alert] = "You must be an admin to do that."
+      redirect_to [post.topic, post]
+    end
+  end
+
+  def authorize_moderator
+    post = Post.find(params[:id])
+
+    unless current_user == post.user || !current_user.moderator?
+      flash[:alert] = "Moderators cannot perform this action."
       redirect_to [post.topic, post]
     end
   end
