@@ -72,4 +72,13 @@ class PostsController < ApplicationController
       redirect_to [post.topic, post]
     end
   end
+
+  def authorize_moderator
+    post = Post.find(params[:id])
+
+    unless current_user == post.user || !current_user.moderator?
+      flash[:alert] = "Moderators cannot perform this action."
+      redirect_to [post.topic, post]
+    end
+  end
 end

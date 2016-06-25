@@ -67,4 +67,10 @@ class TopicsController < ApplicationController
       redirect_to topics_path
     end
   end
+
+  def authorize_moderator
+    unless current_user.moderator?
+      flash[:alert] = "Moderators cannot perform this action."
+      redirect_to topics_path
+  end
 end
