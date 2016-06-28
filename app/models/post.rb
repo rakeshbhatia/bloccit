@@ -11,7 +11,7 @@ class Post < ActiveRecord::Base
   default_scope { order('rank DESC') }
 
   scope :visible_to, -> (user) { user ? all : joins(:topic).where('topics.public' => true) }
-  scope :favorited_by, -> (user) { joins(:post).where('post.favorite') => true}
+  scope :favorited_by, -> (user) { joins(:favorites).where('favorite.user_id' => user.id) }
 
   validates :title, length: { minimum: 5 }, presence: true
   validates :body, length: { minimum: 20 }, presence: true

@@ -19,6 +19,28 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col-md-8">
+    <div class="media">
+      <br />
+      <% if any_fav_posts?(@user) %>
+        <h2>Favorite Posts</h2>
+          <%= render @fav_posts %>
+        <div class="media-left">
+          <%= image_tag avatar_url, class: 'media-object' %>
+        </div>
+      <% end %>
+      <div class="media-body">
+        <h2 class="media-heading"><%= @user.name %></h2>
+        <small>
+          <%= pluralize(@user.posts.count, 'post') %>,
+          <%= pluralize(@user.comments.count, 'comment') %>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
 <% if any_posts?(@user) %>
   <h2>Posts</h2>
   <%= render @user.posts %>
