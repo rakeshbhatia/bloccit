@@ -3,7 +3,7 @@ class CommentsController < ApplicationController
   before_action :authorize_user, only: [:destroy]
 
   def create
-    if Topic.find(params[:topic_id])
+    if Topic.find_by(id: params[:topic_id])
       @topic = Topic.find(params[:topic_id])
       comment = @topic.comments.new(comment_params)
       comment.user = current_user

@@ -29,10 +29,12 @@
     <div class="col-md-8">
       <div>
         <h3>Comments</h3>
-        <%= render @topic.comments %>
+        <%- @topic.comments.each do |comment| %>
+          <%= render partial: "comments/comment", locals: { association: @topic, comment: comment } %>
+        <% end %>
       </div>
       <% if current_user %>
-        <%= render 'comments/form', comment: Comment.new, association: @topic %>
+        <%= render partial: 'comments/form', locals: { association: @topic, comment: Comment.new } %>
       <% end %>
     </div>
   </div>
