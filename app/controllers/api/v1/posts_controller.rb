@@ -1,7 +1,8 @@
 class Api::V1::PostsController < Api::V1::BaseController
 
   def update
-    post = Post.find(params[:id])
+    topic = Topic.find(params[:topic_id])
+    post = topic.posts.find(params[:id])
 
     if post.update_attributes(post_params)
       render json: user, status: 200
@@ -11,8 +12,11 @@ class Api::V1::PostsController < Api::V1::BaseController
   end
 
   def create
-    post = Post.new(post_params)
+    topic = Topic.find(params[:topic_id])
+    post = topic.posts.new(post_params)
+    post.user = current_user
 
+            binding.pry
     if post.valid?
       post.save!
       render json: post, status: 201
@@ -24,6 +28,6 @@ class Api::V1::PostsController < Api::V1::BaseController
 
   private
   def post_params
-    params.require(:post).permit(:title, :body, :topic, :user, :rank)
+    params.require(:post).permit(:title, :body, :rank)
   end
 end
