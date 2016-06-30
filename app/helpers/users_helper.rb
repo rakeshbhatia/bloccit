@@ -1,13 +1,13 @@
 module UsersHelper
   def any_posts?(user)
-    user.posts.size.not_nil?
+    user.posts.any?
   end
 
-  def any_fav_posts?(user)
-    user.fav_posts.size.not_nil?
+  def any_favorite_posts?(user)
+    user.favorites.any?
   end
 
   def any_comments?(user)
-    user.comments.size.not_nil?
+    user.comments.any?
   end
 end

@@ -19,37 +19,21 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-8">
-    <div class="media">
-      <br />
-      <% if any_fav_posts?(@user) %>
-        <h2>Favorite Posts</h2>
-          <%= render @fav_posts %>
-        <div class="media-left">
-          <%= image_tag avatar_url, class: 'media-object' %>
-        </div>
-      <% end %>
-      <div class="media-body">
-        <h2 class="media-heading"><%= @user.name %></h2>
-        <small>
-          <%= pluralize(@user.posts.count, 'post') %>,
-          <%= pluralize(@user.comments.count, 'comment') %>
-        </small>
-      </div>
-    </div>
-  </div>
-</div>
-
 <% if any_posts?(@user) %>
   <h2>Posts</h2>
   <%= render @user.posts %>
 <% else %>
-  <p><%= "{user.name} has not submitted any posts yet." %></p>
+  <p><%= "#{@user.name} has not submitted any posts yet." %></p>
 <% end %>
 <% if any_comments?(@user) %>
   <h2>Comments</h2>
   <%= render @user.comments %>
 <% else %>
-  <p><%= "{user.name} has not submitted any comments yet." %></p>
+  <p><%= "#{@user.name} has not submitted any comments yet." %></p>
+<% end %>
+<% if any_favorite_posts?(@user) %>
+  <h2>Favorite Posts</h2>
+  <% @user.favorites.each do |favorite| %>
+    <%= render partial: 'posts/post', locals: { post: favorite.post } %>
+  <% end %>
 <% end %>

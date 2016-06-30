@@ -1,5 +1,10 @@
 <div class="media">
-  <%= gravatar(post.user) %>
+  <% avatar_url = post.user.avatar_url(128) %>
+  <% if avatar_url %>
+    <div class="media-left">
+      <%= image_tag avatar_url, class: 'media-object' %>
+    </div>
+  <% end %>
   <%= render partial: 'votes/voter', locals: { post: post } %>
   <div class="media-body">
     <h4 class="media-heading">
