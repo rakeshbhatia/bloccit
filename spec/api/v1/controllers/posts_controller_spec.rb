@@ -1,19 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Api::V1::PostsController, type: :controller do
-  let(:my_post) { create(:post) }
+  let(:my_post) { create(:post, topic: my_topic) }
   let(:my_user) { create(:user) }
   let(:my_topic) { create(:topic) }
 
   before do
     controller.request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Token.encode_credentials(my_user.auth_token)
-  end
-
-  describe "GET #index" do
-    it "returns a 200 status" do
-      get :index
-      expect(response.status).to eq(200)
-    end
   end
 
   describe "PUT update" do
@@ -93,6 +86,26 @@ RSpec.describe Api::V1::PostsController, type: :controller do
       it "returns the correct json error message" do
         expect(response.body).to eq({ "error": "Post is invalid", "status": 400 }.to_json)
       end
+    end
+  end
+
+  describe "DELETE destroy" do
+    before { delete :destroy, id: my_post.id, topic_id: my_topic.id }
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "returns json content type" do
+      expect(response.content_type).to eq 'application/json'
+    end
+
+    it "returns the correct json success message" do
+      expect(response.body).to eq({ message: "Post destroyed", status: 200 }.to_json)
+    end
+
+    it "deletes my_post" do
+      expect{ Post.find(my_post.id) }.to raise_exception(ActiveRecord::RecordNotFound)
     end
   end
 end

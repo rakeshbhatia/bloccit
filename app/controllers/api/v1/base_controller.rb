@@ -10,6 +10,10 @@ class Api::V1::BaseController < ApplicationController
     end
   end
 
+  def current_user
+    @current_user
+  end
+
   def authorize_user
     unless @current_user && @current_user.admin?
       render json: {error: "Not Authorized", status: 403}, status: 403
